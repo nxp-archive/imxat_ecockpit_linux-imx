@@ -35,7 +35,7 @@
 #include "ipuv3/ipuv3-plane.h"
 
 #if IS_ENABLED(CONFIG_DRM_FBDEV_EMULATION)
-static int legacyfb_depth = 16;
+static int legacyfb_depth = 32;
 module_param(legacyfb_depth, int, 0444);
 #endif
 
