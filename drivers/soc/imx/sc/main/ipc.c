@@ -105,7 +105,7 @@ static uint32_t *sc_ipc_get_mu_base(uint32_t id)
 	if (id >= SC_NUM_IPC)
 		base = NULL;
 	else
-		base = (uint32_t *) (mu_base_virtaddr + (id * MU_SIZE));
+		base = (uint32_t *) mu_base_virtaddr;
 
 	return base;
 }
