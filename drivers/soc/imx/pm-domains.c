@@ -85,6 +85,7 @@ static int imx8_pd_power(struct generic_pm_domain *domain, bool power_on)
 	struct imx8_pm_domain *pd;
 	sc_err_t sci_err = SC_ERR_NONE;
 	unsigned int pd_state;
+	bool owned = false;
 
 	pd = container_of(domain, struct imx8_pm_domain, pd);
 
@@ -107,6 +108,12 @@ static int imx8_pd_power(struct generic_pm_domain *domain, bool power_on)
 		return 0;
 
 	pd_state = pd->pd.state_idx;
+	owned = sc_rm_is_resource_owned(pm_ipc_handle, pd->rsrc_id);
+	if (!owned) {
+		pr_warn("Resource %d not owned by partition, power state unchanged\n",
+				pd->rsrc_id);
+		return 0;
+	}
 
 	if (power_on) {
 		sci_err = sc_pm_set_resource_power_mode(pm_ipc_handle,
