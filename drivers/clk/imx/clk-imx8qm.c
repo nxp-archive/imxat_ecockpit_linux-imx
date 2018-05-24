@@ -152,7 +152,7 @@ static const char *enet1_rmii_tx_sels[] = {"enet1_ref_div", "dummy",};
 static int imx8qm_clk_probe(struct platform_device *pdev)
 {
 	struct device_node *ccm_node = pdev->dev.of_node;
-	struct device_node *np_acm;
+	struct device_node *np_acm, *tmp;
 	void __iomem *base_acm;
 	u64 base_lpcg = 0;
 	int i, ret;
@@ -419,12 +419,17 @@ static int imx8qm_clk_probe(struct platform_device *pdev)
 	clks[IMX8QM_USB2_OH_IPG_S_CLK]   = imx_clk_gate2_scu("usboh3_ipg_s", "ipg_conn_clk_root", LPCG_ADDR(USB_2_LPCG), 16, FUNCTION_NAME(PD_CONN_USB_0));
 	clks[IMX8QM_USB2_OH_IPG_S_PL301_CLK]   = imx_clk_gate2_scu("usboh3_ipg_pl301_s", "ipg_conn_clk_root", LPCG_ADDR(USB_2_LPCG), 20, FUNCTION_NAME(PD_CONN_USB_0));
 	clks[IMX8QM_USB2_PHY_IPG_CLK]   = imx_clk_gate2_scu("usboh3_phy_clk", "ipg_conn_clk_root", LPCG_ADDR(USB_2_LPCG), 28, FUNCTION_NAME(PD_CONN_USB_0));
-	clks[IMX8QM_USB3_IPG_CLK]   = imx_clk_gate2_scu("usb3_ipg_clk", "ipg_conn_clk_root", LPCG_ADDR(USB_3_LPCG), 16, FUNCTION_NAME(PD_CONN_USB_2));
-	clks[IMX8QM_USB3_CORE_PCLK]   = imx_clk_gate2_scu("usb3_core_clk", "ipg_conn_clk_root", LPCG_ADDR(USB_3_LPCG), 20, FUNCTION_NAME(PD_CONN_USB_2));
-	clks[IMX8QM_USB3_PHY_CLK]   = imx_clk_gate2_scu("usb3_phy_clk", "usb3_ipg_clk", LPCG_ADDR(USB_3_LPCG), 24, FUNCTION_NAME(PD_CONN_USB_2_PHY));
-	clks[IMX8QM_USB3_ACLK] = imx_clk_gate_scu("usb3_aclk", "usb3_aclk_div", SC_R_USB_2, SC_PM_CLK_PER, LPCG_ADDR(USB_3_LPCG), 28, 0);
-	clks[IMX8QM_USB3_BUS_CLK] = imx_clk_gate_scu("usb3_bus_clk", "usb3_bus_div", SC_R_USB_2, SC_PM_CLK_MST_BUS, LPCG_ADDR(USB_3_LPCG), 0, 0);
-	clks[IMX8QM_USB3_LPM_CLK] = imx_clk_gate_scu("usb3_lpm_clk", "usb3_lpm_div", SC_R_USB_2, SC_PM_CLK_MISC, LPCG_ADDR(USB_3_LPCG), 4, 0);
+
+	tmp = of_find_compatible_node(NULL, NULL, "Cadence,usb3");
+	if (tmp) {
+		clks[IMX8QM_USB3_IPG_CLK]   = imx_clk_gate2_scu("usb3_ipg_clk", "ipg_conn_clk_root", LPCG_ADDR(USB_3_LPCG), 16, FUNCTION_NAME(PD_CONN_USB_2));
+		clks[IMX8QM_USB3_CORE_PCLK]   = imx_clk_gate2_scu("usb3_core_clk", "ipg_conn_clk_root", LPCG_ADDR(USB_3_LPCG), 20, FUNCTION_NAME(PD_CONN_USB_2));
+		clks[IMX8QM_USB3_PHY_CLK]   = imx_clk_gate2_scu("usb3_phy_clk", "usb3_ipg_clk", LPCG_ADDR(USB_3_LPCG), 24, FUNCTION_NAME(PD_CONN_USB_2_PHY));
+		clks[IMX8QM_USB3_ACLK] = imx_clk_gate_scu("usb3_aclk", "usb3_aclk_div", SC_R_USB_2, SC_PM_CLK_PER, LPCG_ADDR(USB_3_LPCG), 28, 0);
+		clks[IMX8QM_USB3_BUS_CLK] = imx_clk_gate_scu("usb3_bus_clk", "usb3_bus_div", SC_R_USB_2, SC_PM_CLK_MST_BUS, LPCG_ADDR(USB_3_LPCG), 0, 0);
+		clks[IMX8QM_USB3_LPM_CLK] = imx_clk_gate_scu("usb3_lpm_clk", "usb3_lpm_div", SC_R_USB_2, SC_PM_CLK_MISC, LPCG_ADDR(USB_3_LPCG), 4, 0);
+	}
+
 	clks[IMX8QM_EDMA_CLK]   = imx_clk_gate2_scu("edma_clk", "axi_conn_clk_root", LPCG_ADDR(EDMA_LPCG), 0, FUNCTION_NAME(PD_CONN_DMA_4_CH0));
 	clks[IMX8QM_EDMA_IPG_CLK]   = imx_clk_gate2_scu("edma_ipg_clk", "ipg_conn_clk_root", LPCG_ADDR(EDMA_LPCG), 16, FUNCTION_NAME(PD_CONN_DMA_4_CH0));
 	clks[IMX8QM_MLB_HCLK]   = imx_clk_gate2_scu("mlb_hclk", "axi_conn_clk_root", LPCG_ADDR(MLB_LPCG), 20, FUNCTION_NAME(PD_CONN_MLB_0));
