@@ -15,7 +15,6 @@
 
 #include <dt-bindings/interrupt-controller/arm-gic.h>
 #include "fsl-imx8-ca53.dtsi"
-#include "fsl-imx8-ca72.dtsi"
 #include <dt-bindings/clock/imx8qm-clock.h>
 #include <dt-bindings/input/input.h>
 #include <dt-bindings/soc/imx_rsrc.h>
@@ -32,35 +31,35 @@
 	#size-cells = <2>;
 
 	aliases {
-		csi0 = &mipi_csi_0;
-		csi1 = &mipi_csi_1;
+//		csi0 = &mipi_csi_0;
+//		csi1 = &mipi_csi_1;
 		dpu0 = &dpu1;
-		dpu1 = &dpu2;
+//		dpu1 = &dpu2;
 		ethernet0 = &fec1;
-		ethernet1 = &fec2;
+//		ethernet1 = &fec2;
 		dsi_phy0 = &mipi_dsi_phy1;
-		dsi_phy1 = &mipi_dsi_phy2;
+//		dsi_phy1 = &mipi_dsi_phy2;
 		mipi_dsi0 = &mipi_dsi1;
-		mipi_dsi1 = &mipi_dsi2;
+//		mipi_dsi1 = &mipi_dsi2;
 		ldb0 = &ldb1;
-		ldb1 = &ldb2;
-		isi0 = &isi_0;
-		isi1 = &isi_1;
-		isi2 = &isi_2;
-		isi3 = &isi_3;
-		isi4 = &isi_4;
-		isi5 = &isi_5;
-		isi6 = &isi_6;
-		isi7 = &isi_7;
+//		ldb1 = &ldb2;
+//		isi0 = &isi_0;
+//		isi1 = &isi_1;
+//		isi2 = &isi_2;
+//		isi3 = &isi_3;
+//		isi4 = &isi_4;
+//		isi5 = &isi_5;
+//		isi6 = &isi_6;
+//		isi7 = &isi_7;
 		serial0 = &lpuart0;
-		serial1 = &lpuart1;
-		serial2 = &lpuart2;
+//		serial1 = &lpuart1;
+//		serial2 = &lpuart2;
 		serial3 = &lpuart3;
-		serial4 = &lpuart4;
-		mmc0 = &usdhc1;
+//		serial4 = &lpuart4;
+//		mmc0 = &usdhc1;
 		mmc1 = &usdhc2;
 		mmc2 = &usdhc3;
-		usbphy0 = &usbphy1;
+//		usbphy0 = &usbphy1;
 		can0 = &flexcan1;
 		can1 = &flexcan2;
 		can2 = &flexcan3;
@@ -70,7 +69,7 @@
 
 	memory@80000000 {
 		device_type = "memory";
-		reg = <0x00000000 0x80000000 0 0x40000000>;
+		reg = <0x00000000 0x80000000 0 0x3FF00000>;
 		      /* DRAM space - 1, size : 1 GB DRAM */
 	};
 
@@ -125,10 +124,14 @@
 			compatible = "shared-dma-pool";
 			reusable;
 			size = <0 0x3c000000>;
-			alloc-ranges = <0 0x96000000 0 0x3c000000>;
+			alloc-ranges = <0 0x96000000 0 0x28000000>;
 			linux,cma-default;
 		};
 
+		a72_reserved {
+			no-map;
+			reg = <0 0xc0000000 0 0x40000000>;
+		};
 	};
 
 	gic: interrupt-controller@51a00000 {
@@ -150,7 +153,7 @@
 		reg = <0x0 0x5d1c0000 0x0 0x10000>;
 		interrupts = <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH>;
 		interrupt-parent = <&gic>;
-		fsl,scu_ap_mu_id = <0>;
+		fsl,scu_ap_mu_id = <1>;
 		status = "okay";
 	};
 
@@ -279,6 +282,7 @@
 		#size-cells = <1>;
 		reg = <0 0x52090000 0 0x1000>;
 		ranges = <0 0 0x52090000 0x10000>;
+		status = "disabled";
 
 		pmu@9000 {
 			compatible = "arm,cci-400-pmu,r1",
@@ -294,7 +298,7 @@
 		};
 	};
 
-	#include "fsl-imx8qm-device.dtsi"
+	#include "fsl-imx8qm-device-a53.dtsi"
 };
 
 &A53_0 {
@@ -311,22 +315,6 @@
 	#cooling-cells = <2>;
 	/delete-property/ cpu-idle-states;
 };
-
-&A72_0 {
-	operating-points = <
-		/* kHz    uV */
-		/* voltage is maintained by SCFW, so no need here */
-		1596000	   0
-		1296000	   0
-		1056000	   0
-		600000     0
-	>;
-	clocks = <&clk IMX8QM_A72_DIV>;
-	clock-latency = <61036>;
-	#cooling-cells = <2>;
-	/delete-property/ cpu-idle-states;
-};
-
 
 &imx8_gpu_ss {/*<freq-kHz vol-uV>*/
        operating-points = <
@@ -350,6 +338,3 @@
 	/delete-property/ cpu-idle-states;
 };
 
-&A72_1 {
-	/delete-property/ cpu-idle-states;
-};
