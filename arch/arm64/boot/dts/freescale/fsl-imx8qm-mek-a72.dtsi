@@ -12,15 +12,15 @@
  * GNU General Public License for more details.
  */
 
-#include "fsl-imx8qm.dtsi"
+#include "fsl-imx8qm-a72.dtsi"
 
 / {
 	model = "Freescale i.MX8QM MEK";
 	compatible = "fsl,imx8qm-mek", "fsl,imx8qm";
 
 	chosen {
-		bootargs = "console=ttyLP0,115200 earlycon=lpuart32,0x5a060000,115200";
-		stdout-path = &lpuart0;
+		bootargs = "console=ttyLP2,115200 earlycon=lpuart32,0x5a080000,115200";
+		stdout-path = &lpuart2;
 	};
 
 	brcmfmac: brcmfmac {
@@ -29,6 +29,7 @@
 		pinctrl-0 = <&pinctrl_wifi_init>;
 		pinctrl-1 = <&pinctrl_wifi_init>;
 		pinctrl-2 = <&pinctrl_wifi>;
+		status = "disabled";
 	};
 
 	modem_reset: modem-reset {
@@ -40,6 +41,7 @@
 		reset-delay-us = <2000>;
 		reset-post-delay-ms = <40>;
 		#reset-cells = <0>;
+		status = "disabled";
 	};
 
 	regulators {
@@ -54,6 +56,7 @@
 			regulator-max-microvolt = <3300000>;
 			gpio = <&pca6416 3 GPIO_ACTIVE_HIGH>;
 			enable-active-high;
+			status = "disabled";
 		};
 
 		reg_can2_en: regulator-can2-gen {
@@ -63,6 +66,7 @@
 			regulator-max-microvolt = <3300000>;
 			gpio = <&pca6416 4 GPIO_ACTIVE_HIGH>;
 			enable-active-high;
+			status = "disabled";
 		};
 
 		reg_can01_stby: regulator-can01-stby {
@@ -73,6 +77,7 @@
 			gpio = <&pca6416 5 GPIO_ACTIVE_HIGH>;
 			enable-active-high;
 			vin-supply = <&reg_can01_en>;
+			status = "disabled";
 		};
 
 		reg_can2_stby: regulator-can2-stby {
@@ -83,6 +88,7 @@
 			gpio = <&pca6416 6 GPIO_ACTIVE_HIGH>;
 			enable-active-high;
 			vin-supply = <&reg_can2_en>;
+			status = "disabled";
 		};
 
 		reg_fec2_supply: fec2_nvcc {
@@ -90,8 +96,9 @@
 			regulator-name = "fec2_nvcc";
 			regulator-min-microvolt = <1800000>;
 			regulator-max-microvolt = <1800000>;
-			gpio = <&max7322 0 GPIO_ACTIVE_HIGH>;
+//			gpio = <&max7322 0 GPIO_ACTIVE_HIGH>;
 			enable-active-high;
+			status = "disabled";
 		};
 
 		epdev_on: fixedregulator@100 {
@@ -104,6 +111,7 @@
 			regulator-name = "epdev_on";
 			gpio = <&gpio1 13 0>;
 			enable-active-high;
+			status = "disabled";
 		};
 
 		reg_usdhc2_vmmc: usdhc2_vmmc {
@@ -114,6 +122,7 @@
 			gpio = <&gpio4 7 GPIO_ACTIVE_HIGH>;
 			off-on-delay = <4800>;
 			enable-active-high;
+			status = "disabled";
 		};
 
 		reg_audio: fixedregulator@2 {
@@ -130,6 +139,7 @@
 			regulator-name = "vref_1v8";
 			regulator-min-microvolt = <1800000>;
 			regulator-max-microvolt = <1800000>;
+			status = "disabled";
 		};
 	};
 
@@ -187,7 +197,7 @@
 
 	lvds_backlight0: lvds_backlight@0 {
 		compatible = "pwm-backlight";
-		pwms = <&lvds0_pwm 0 100000 0>;
+//		pwms = <&lvds0_pwm 0 100000 0>;
 
 		brightness-levels = < 0  1  2  3  4  5  6  7  8  9
 				     10 11 12 13 14 15 16 17 18 19
@@ -201,6 +211,7 @@
 				     90 91 92 93 94 95 96 97 98 99
 				    100>;
 		default-brightness-level = <80>;
+		status = "disabled";
 	};
 
 	lvds_backlight1: lvds_backlight@1 {
@@ -264,7 +275,6 @@
 		pinctrl_hog: hoggrp {
 			fsl,pins = <
 				SC_P_MCLK_OUT0_AUD_ACM_MCLK_OUT0	0x0600004c
-				SC_P_QSPI1A_DATA1_LSIO_GPIO4_IO25	0x0600004c
 				SC_P_SCU_GPIO0_03_LSIO_GPIO0_IO31	0x0600004c
 			>;
 		};
@@ -622,7 +632,7 @@
 			fsl,pins = <
 				SC_P_MIPI_DSI1_I2C0_SCL_MIPI_DSI1_I2C0_SCL	0xc600004c
 				SC_P_MIPI_DSI1_I2C0_SDA_MIPI_DSI1_I2C0_SDA	0xc600004c
-				SC_P_MIPI_DSI1_GPIO0_01_LSIO_GPIO1_IO23		0x00000020
+//				SC_P_MIPI_DSI1_GPIO0_01_LSIO_GPIO1_IO23		0x00000020
 			>;
 		};
 
@@ -637,14 +647,14 @@
 				SC_P_MIPI_CSI0_GPIO0_00_LSIO_GPIO1_IO27		0x00000021
 				SC_P_MIPI_CSI0_GPIO0_01_LSIO_GPIO1_IO28		0x00000021
 			>;
-                };
+		};
 
 		pinctrl_mipi_csi1_en_rst: mipi_csi1_en_rst {
 			fsl,pins = <
 				SC_P_MIPI_CSI1_GPIO0_00_LSIO_GPIO1_IO30         0x00000021
 				SC_P_MIPI_CSI1_GPIO0_01_LSIO_GPIO1_IO31         0x00000021
 			>;
-                };
+		};
 
 		pinctrl_wifi: wifigrp{
 			fsl,pins = <
@@ -676,7 +686,7 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_adc0>;
 	vref-supply = <&reg_vref_1v8>;
-	status = "okay";
+	status = "disabled";
 };
 
 &asrc0 {
@@ -703,7 +713,7 @@
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&pinctrl_sim0>;
 	pinctrl-1 = <&pinctrl_sim0>;
-	status = "okay";
+	status = "disabled";
 };
 &sai1 {
 	assigned-clocks = <&clk IMX8QM_AUD_PLL0_DIV>,
@@ -730,7 +740,7 @@
 &usbotg3 {
 	dr_mode = "otg";
 	extcon = <&typec_ptn5110>;
-	status = "okay";
+	status = "disabled";
 };
 
 &usdhc1 {
@@ -740,6 +750,7 @@
 	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
 	bus-width = <8>;
 	non-removable;
+	/delete-property/ iommus;
 	status = "okay";
 };
 
@@ -753,6 +764,11 @@
 	wp-gpios = <&gpio5 21 GPIO_ACTIVE_HIGH>;
 	vmmc-supply = <&reg_usdhc2_vmmc>;
 	status = "okay";
+	/delete-property/ iommus;
+};
+
+&usdhc3 {
+	/delete-property/ iommus;
 };
 
 &fec1 {
@@ -826,7 +842,7 @@
 	clock-frequency = <100000>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_i2c0>;
-	status = "okay";
+	status = "disabled";
 
 	isl29023@44 {
 		pinctrl-names = "default";
@@ -909,7 +925,7 @@
 	clock-frequency = <100000>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_cm41_i2c0>;
-	status = "okay";
+	status = "disabled";
 
 	pca6416: gpio@20 {
 		compatible = "ti,tca6416";
@@ -935,7 +951,7 @@
 				<&clk IMX8QM_AUD_MCLKOUT0>;
 		assigned-clock-rates = <786432000>, <49152000>, <12288000>, <12288000>;
 		fsl,txs-rxm;
-		status = "okay";
+		status = "disabled";
 	};
 };
 
@@ -947,116 +963,119 @@
 	phy-supply = <&reg_fec2_supply>;
 	fsl,magic-packet;
 	fsl,rgmii_rxc_dly;
-	status = "okay";
+	status = "disabled";
 };
 
-&pd_dma_lpuart0 {
+&pd_dma_lpuart2 {
 	debug_console;
 };
 
 &lpuart0 { /* console */
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_lpuart0>;
-	status = "okay";
+	status = "disabled";
 };
 
 &lpuart1 { /* BT */
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_lpuart1>;
 	resets = <&modem_reset>;
-	status = "okay";
+	status = "disabled";
 };
 
 &lpuart2 { /* Dbg console */
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_lpuart2>;
-	status = "disabled";
+	interrupt-parent = <&gic>;
+	/* override power domain */
+	power-domains = <&pd_dma_lpuart2>;
+	/delete-property/ dma-names;
+	/delete-property/ dmas;
+	status = "okay";
 };
 
 &lpuart3 { /* MKbus */
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_lpuart3>;
-	status = "okay";
+	status = "disabled";
 };
 
-&gpu_3d0 {
-        status = "okay";
-};
 
 &gpu_3d1 {
         status = "okay";
 };
 
 &imx8_gpu_ss {
+	cores = <&gpu_3d1>;
         status = "okay";
 };
 
 &pixel_combiner1 {
-	status = "okay";
+	status = "disabled";
 };
 
 &prg1 {
-	status = "okay";
+	status = "disabled";
 };
 
 &prg2 {
-	status = "okay";
+	status = "disabled";
 };
 
 &prg3 {
-	status = "okay";
+	status = "disabled";
 };
 
 &prg4 {
-	status = "okay";
+	status = "disabled";
 };
 
 &prg5 {
-	status = "okay";
+	status = "disabled";
 };
 
 &prg6 {
-	status = "okay";
+	status = "disabled";
 };
 
 &prg7 {
-	status = "okay";
+	status = "disabled";
 };
 
 &prg8 {
-	status = "okay";
+	status = "disabled";
 };
 
 &prg9 {
-	status = "okay";
+	status = "disabled";
 };
 
 &dpr1_channel1 {
-	status = "okay";
+	status = "disabled";
 };
 
 &dpr1_channel2 {
-	status = "okay";
+	status = "disabled";
 };
 
 &dpr1_channel3 {
-	status = "okay";
+	status = "disabled";
 };
 
 &dpr2_channel1 {
-	status = "okay";
+	status = "disabled";
 };
 
 &dpr2_channel2 {
-	status = "okay";
+	status = "disabled";
 };
 
 &dpr2_channel3 {
-	status = "okay";
+	status = "disabled";
 };
 
 &dpu1 {
-	status = "okay";
+	status = "disabled";
 };
 
 &pixel_combiner2 {
@@ -1287,16 +1306,16 @@
 };
 
 &ldb1_phy {
-	status = "okay";
+	status = "disabled";
 };
 
 &ldb1 {
-	status = "okay";
+	status = "disabled";
 
 	lvds-channel@0 {
 		fsl,data-mapping = "jeida";
 		fsl,data-width = <24>;
-		status = "okay";
+		status = "disabled";
 
 		port@1 {
 			reg = <1>;
@@ -1314,7 +1333,7 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_lvds0_lpi2c1>;
 	clock-frequency = <100000>;
-	status = "okay";
+	status = "disabled";
 
 	lvds-to-hdmi-bridge@4c {
 		compatible = "ite,it6263";
@@ -1380,7 +1399,7 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_mipi0_lpi2c0>;
 	clock-frequency = <100000>;
-	status = "okay";
+	status = "disabled";
 
 	adv_bridge1: adv7535@3d {
 		compatible = "adi,adv7535", "adi,adv7533";
@@ -1389,7 +1408,7 @@
 		adi,dsi-channel = <1>;
 		interrupt-parent = <&gpio1>;
 		interrupts = <19 IRQ_TYPE_LEVEL_LOW>;
-		status = "okay";
+		status = "disabled";
 
 		port {
 			adv7535_1_in: endpoint {
@@ -1400,16 +1419,16 @@
 };
 
 &mipi_dsi_phy1 {
-	status = "okay";
+	status = "disabled";
 };
 
 &mipi_dsi1 {
 	pwr-delay = <10>;
-	status = "okay";
+	status = "disabled";
 };
 
 &mipi_dsi_bridge1 {
-	status = "okay";
+	status = "disabled";
 
 	port@1 {
 		mipi_dsi_bridge1_adv: endpoint {
@@ -1424,16 +1443,16 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_mipi1_lpi2c0>;
 	clock-frequency = <100000>;
-	status = "okay";
+	status = "disabled";
 
 	adv_bridge2: adv7535@3d {
 		compatible = "adi,adv7535", "adi,adv7533";
 		reg = <0x3d>;
 		adi,dsi-lanes = <4>;
 		adi,dsi-channel = <1>;
-		interrupt-parent = <&gpio1>;
-		interrupts = <23 IRQ_TYPE_LEVEL_LOW>;
-		status = "okay";
+//		interrupt-parent = <&gpio1>;
+//		interrupts = <23 IRQ_TYPE_LEVEL_LOW>;
+		status = "disabled";
 
 		port {
 			adv7535_2_in: endpoint {
@@ -1444,16 +1463,16 @@
 };
 
 &mipi_dsi_phy2 {
-	status = "okay";
+	status = "disabled";
 };
 
 &mipi_dsi2 {
 	pwr-delay = <10>;
-	status = "okay";
+	status = "disabled";
 };
 
 &mipi_dsi_bridge2 {
-	status = "okay";
+	status = "disabled";
 
 	port@1 {
 		mipi_dsi_bridge2_adv: endpoint {
@@ -1465,13 +1484,132 @@
 &lvds0_pwm {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_lvds0_pwm0>;
-	status = "okay";
+	status = "disabled";
 };
 
 &lvds1_pwm {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_lvds1_pwm0>;
 	status = "okay";
+};
+
+&display {
+	ports = <&dpu2_disp0>, <&dpu2_disp1>;
+};
+
+&edma0 {
+	reg = <0x0 0x5a300000 0x0 0x10000>, /* channel16 UART2 rx */
+	      <0x0 0x5a310000 0x0 0x10000>; /* channel17 UART2 tx */
+	dma-channels = <2>;
+	interrupts = <GIC_SPI 438 IRQ_TYPE_LEVEL_HIGH>,
+		     <GIC_SPI 439 IRQ_TYPE_LEVEL_HIGH>;
+	interrupt-names = "edma0-chan16-rx", "edma0-chan17-tx";
+};
+
+&edma2 {
+	reg = <0x0 0x59200000 0x0 0x10000>, /* asrc0 */
+		<0x0 0x59210000 0x0 0x10000>,
+		<0x0 0x59220000 0x0 0x10000>,
+		<0x0 0x59230000 0x0 0x10000>,
+		<0x0 0x59240000 0x0 0x10000>,
+		<0x0 0x59250000 0x0 0x10000>,
+		<0x0 0x59260000 0x0 0x10000>, /* esai0 rx */
+		<0x0 0x59270000 0x0 0x10000>, /* esai0 tx */
+		<0x0 0x592c0000 0x0 0x10000>, /* sai0 rx */
+		<0x0 0x592d0000 0x0 0x10000>, /* sai0 tx */
+		<0x0 0x592e0000 0x0 0x10000>, /* sai1 rx */
+		<0x0 0x592f0000 0x0 0x10000>, /* sai1 tx */
+		<0x0 0x59320000 0x0 0x10000>, /* sai4 rx */
+		<0x0 0x59330000 0x0 0x10000>; /* sai5 tx */
+	dma-channels = <14>;
+	interrupts =	<GIC_SPI 374 IRQ_TYPE_LEVEL_HIGH>, /* asrc0 */
+			<GIC_SPI 375 IRQ_TYPE_LEVEL_HIGH>,
+			<GIC_SPI 376 IRQ_TYPE_LEVEL_HIGH>,
+			<GIC_SPI 377 IRQ_TYPE_LEVEL_HIGH>,
+			<GIC_SPI 378 IRQ_TYPE_LEVEL_HIGH>,
+			<GIC_SPI 379 IRQ_TYPE_LEVEL_HIGH>,
+			<GIC_SPI 410 IRQ_TYPE_LEVEL_HIGH>, /* esai0 */
+			<GIC_SPI 410 IRQ_TYPE_LEVEL_HIGH>,
+			<GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>, /* sai0 */
+			<GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
+			<GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>, /* sai1 */
+			<GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>,
+			<GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>, /* sai4 */
+			<GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>; /* sai5 */
+	interrupt-names = "edma2-chan0-rx", "edma2-chan1-rx", /* asrc0 */
+			"edma2-chan2-rx", "edma2-chan3-tx",
+			"edma2-chan4-tx", "edma2-chan5-tx",
+			"edma2-chan6-rx", "edma2-chan7-tx", /* esai0 */
+			"edma2-chan12-rx", "edma2-chan13-tx", /* sai0 */
+			"edma2-chan14-rx", "edma2-chan15-tx", /* sai1 */
+			"edma2-chan18-rx", "edma2-chan19-tx"; /* sai4, sai5 */
+};
+
+&edma3 {
+	reg =	<0x0 0x59A00000 0x0 0x10000>, /* asrc1 */
+		<0x0 0x59A10000 0x0 0x10000>,
+		<0x0 0x59A20000 0x0 0x10000>,
+		<0x0 0x59A30000 0x0 0x10000>,
+		<0x0 0x59A40000 0x0 0x10000>,
+		<0x0 0x59A50000 0x0 0x10000>,
+		<0x0 0x59A80000 0x0 0x10000>, /* sai6 rx */
+		<0x0 0x59A90000 0x0 0x10000>, /* sai6 tx */
+		<0x0 0x59AA0000 0x0 0x10000>; /* sai7 tx */
+	dma-channels = <9>;
+	interrupts = <GIC_SPI 382 IRQ_TYPE_LEVEL_HIGH>, /* asrc1 */
+			<GIC_SPI 383 IRQ_TYPE_LEVEL_HIGH>,
+			<GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
+			<GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
+			<GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
+			<GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
+			<GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>, /* sai6 */
+			<GIC_SPI 330 IRQ_TYPE_LEVEL_HIGH>,
+			<GIC_SPI 332 IRQ_TYPE_LEVEL_HIGH>; /* sai7 */
+	interrupt-names = "edma3-chan0-rx", "edma3-chan1-rx", /* asrc1 */
+			"edma3-chan2-rx", "edma3-chan3-tx",
+			"edma3-chan4-tx", "edma3-chan5-tx",
+			"edma3-chan8-rx", "edma3-chan9-tx", /* sai6 */
+			"edma3-chan10-tx";                 /* sai7 */
+};
+
+&gic {
+	/delete-property/ interrupts;
+};
+
+&gpio0 {
+	status = "okay";
+};
+
+&gpio1 {
+	status = "disabled";
+};
+
+&gpio2 {
+	status = "disabled";
+};
+
+&gpio3 {
+	status = "okay";
+};
+
+&gpio4 {
+	status = "disabled";
+};
+
+&gpio5 {
+	status = "disabled";
+};
+
+&gpio6 {
+	status = "okay";
+};
+
+&sec_jr2 {
+	status = "disabled";
+};
+
+&sec_jr3 {
+	status = "disabled";
 };
 
 &tsens {
@@ -1496,11 +1634,6 @@
 			};
 		};
 		cooling-maps {
-			map0 {
-				trip = <&pmic_alert0>;
-				cooling-device =
-				<&A53_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-			};
 			map1 {
 				trip = <&pmic_alert0>;
 				cooling-device =
@@ -1508,6 +1641,7 @@
 			};
 		};
 	};
+	/delete-node/ cpu-thermal0;
 };
 
 &vpu_decoder {
@@ -1520,3 +1654,39 @@
 };
 
 
+/delete-node/ &dsp;
+/delete-node/ &dpu1;
+/delete-node/ &fec1;
+/delete-node/ &fec2;
+/delete-node/ &hdmi;
+/delete-node/ &hdmi_rx;
+/delete-node/ &i2c0;
+/delete-node/ &i2c0_cm40;
+/delete-node/ &i2c0_hdmi;
+/delete-node/ &i2c1_lvds0;
+/delete-node/ &i2c0_mipi_dsi0;
+/delete-node/ &imx_rpmsg;
+/delete-node/ &intmux_cm40;
+/delete-node/ &irqsteer_dsi0;
+/delete-node/ &irqsteer_hdmi;
+/delete-node/ &irqsteer_hdmi_rx;
+/delete-node/ &irqsteer_lvds0;
+/delete-node/ &ldb1;
+/delete-node/ &ldb1_phy;
+/delete-node/ &lvds_region1;
+/delete-node/ &lvds0_pwm;
+/delete-node/ &mipi_dsi_csr1;
+/delete-node/ &mipi_dsi_bridge1;
+/delete-node/ &mipi_dsi_phy1;
+/delete-node/ &mipi_dsi1;
+/delete-node/ &pd_cm40;
+/delete-node/ &pd_dsp_mu_A;
+/delete-node/ &pd_hdmi_rx;
+/delete-node/ &sata;
+/delete-node/ &smmu;
+/delete-node/ &usbotg3;
+/delete-node/ &usbphynop1;
+/delete-node/ &flexcan1;
+/delete-node/ &flexcan2;
+/delete-node/ &flexcan3;
+/delete-node/ &pciea;
