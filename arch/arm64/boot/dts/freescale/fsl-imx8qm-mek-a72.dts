@@ -14,4 +14,4 @@
 
 /dts-v1/;
 
-#include "fsl-imx8qm-mek.dtsi"
+#include "fsl-imx8qm-mek-a72.dtsi"

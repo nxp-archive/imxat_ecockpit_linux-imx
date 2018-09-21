@@ -70,7 +70,7 @@
 				#address-cells = <1>;
 				#size-cells = <0>;
 
-				pd_lvds0_i2c0: PD_LVDS0_I2C0 {
+				pd_lvds0_i2c1: PD_LVDS0_I2C1 {
 					reg = <SC_R_LVDS_0_I2C_0>;
 					#power-domain-cells = <0>;
 					power-domains =<&pd_lvds0>;
@@ -176,7 +176,7 @@
 				#address-cells = <1>;
 				#size-cells = <0>;
 
-				pd_lvds1_i2c0: PD_LVDS1_I2C0 {
+				pd_lvds1_i2c1: PD_LVDS1_I2C1 {
 					reg = <SC_R_LVDS_1_I2C_0>;
 					#power-domain-cells = <0>;
 					power-domains =<&pd_lvds1>;
@@ -340,14 +340,12 @@
 				reg = <SC_R_USB_0>;
 				#power-domain-cells = <0>;
 				power-domains = <&pd_conn>;
-				wakeup-irq = <267>;
 			};
 
 			pd_conn_usbotg0_phy: PD_CONN_USB_0_PHY {
 				reg = <SC_R_USB_0_PHY>;
 				#power-domain-cells = <0>;
 				power-domains = <&pd_conn>;
-				wakeup-irq = <267>;
 			};
 
 			pd_conn_usbh1: PD_CONN_USB_1 {
@@ -363,13 +361,11 @@
 				#address-cells = <1>;
 				#size-cells = <0>;
 				power-domains = <&pd_conn>;
-				wakeup-irq = <271>;
 
 				pd_conn_usb2_phy: PD_CONN_USB_2_PHY {
 					reg = <SC_R_USB_2_PHY>;
 					#power-domain-cells = <0>;
 					power-domains = <&pd_conn_usb2>;
-					wakeup-irq = <271>;
 				};
 			};
 			pd_conn_sdch0: PD_CONN_SDHC_0 {
@@ -1274,7 +1270,7 @@
 				#address-cells = <1>;
 				#size-cells = <0>;
 
-				pd_csi0_i2c0: PD_MIPI_CSI0_I2C0 {
+				pd_csi0_i2c0: PD_MIPI_CSI0_I2C {
 					reg = <SC_R_CSI_0_I2C_0>;
 					#power-domain-cells = <0>;
 					power-domains =<&pd_csi0>;
@@ -2919,12 +2915,12 @@
 		reg = <0x0 0x56247000 0x0 0x1000>;
 		interrupts = <9 IRQ_TYPE_LEVEL_HIGH>;
 		interrupt-parent = <&irqsteer_lvds0>;
-		clocks = <&clk IMX8QM_LVDS0_I2C0_CLK>,
-			 <&clk IMX8QM_LVDS0_I2C0_IPG_CLK>;
+		clocks = <&clk IMX8QM_LVDS0_I2C1_CLK>,
+			 <&clk IMX8QM_LVDS0_I2C1_IPG_CLK>;
 		clock-names = "per", "ipg";
-		assigned-clocks = <&clk IMX8QM_LVDS0_I2C0_CLK>;
+		assigned-clocks = <&clk IMX8QM_LVDS0_I2C1_CLK>;
 		assigned-clock-rates = <24000000>;
-		power-domains = <&pd_lvds0_i2c0>;
+		power-domains = <&pd_lvds0_i2c1>;
 		status = "disabled";
 	};
 
@@ -2945,12 +2941,12 @@
 		reg = <0x0 0x57247000 0x0 0x1000>;
 		interrupts = <9 IRQ_TYPE_LEVEL_HIGH>;
 		interrupt-parent = <&irqsteer_lvds1>;
-		clocks = <&clk IMX8QM_LVDS1_I2C0_CLK>,
-			 <&clk IMX8QM_LVDS1_I2C0_IPG_CLK>;
+		clocks = <&clk IMX8QM_LVDS1_I2C1_CLK>,
+			 <&clk IMX8QM_LVDS1_I2C1_IPG_CLK>;
 		clock-names = "per", "ipg";
-		assigned-clocks = <&clk IMX8QM_LVDS1_I2C0_CLK>;
+		assigned-clocks = <&clk IMX8QM_LVDS1_I2C1_CLK>;
 		assigned-clock-rates = <24000000>;
-		power-domains = <&pd_lvds1_i2c0>;
+		power-domains = <&pd_lvds1_i2c1>;
 		status = "disabled";
 	};
 
