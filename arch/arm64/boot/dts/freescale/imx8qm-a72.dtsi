@@ -19,15 +19,9 @@
 	#size-cells = <2>;
 
 	aliases {
-		ethernet0 = &fec1;
 		ethernet1 = &fec2;
 		mmc0 = &usdhc1;
-		mmc1 = &usdhc2;
-		mmc2 = &usdhc3;
-		serial0 = &lpuart0;
-		serial1 = &lpuart1;
 		serial2 = &lpuart2;
-		serial3 = &lpuart3;
 		isi0 = &isi_0;
 		isi1 = &isi_1;
 		isi2 = &isi_2;
@@ -38,19 +32,10 @@
 		isi7 = &isi_7;
 		csi0 = &mipi_csi_0;
 		csi1 = &mipi_csi_1;
-		mu1 = &lsio_mu1;
-		can0 = &flexcan1;
-		can1 = &flexcan2;
-		can2 = &flexcan3;
-		dpu0 = &dpu1;
+		mu2 = &lsio_mu2;
 		dpu1 = &dpu2;
-		ldb0 = &ldb1;
 		ldb1 = &ldb2;
-		i2c0 = &i2c_rpbus_0;
-		i2c1 = &i2c_rpbus_1;
-		dphy0 = &mipi0_dphy;
 		dphy1 = &mipi1_dphy;
-		mipi_dsi0 = &mipi0_dsi_host;
 		mipi_dsi1 = &mipi1_dsi_host;
 	};
 
@@ -61,71 +46,12 @@
 		cpu-map {
 			cluster0 {
 				core0 {
-					cpu = <&A53_0>;
-				};
-				core1 {
-					cpu = <&A53_1>;
-				};
-				core2 {
-					cpu = <&A53_2>;
-				};
-				core3 {
-					cpu = <&A53_3>;
-				};
-			};
-
-			cluster1 {
-				core0 {
 					cpu = <&A72_0>;
 				};
 				core1 {
 					cpu = <&A72_1>;
 				};
 			};
-		};
-
-		A53_0: cpu@0 {
-			device_type = "cpu";
-			compatible = "arm,cortex-a53", "arm,armv8";
-			reg = <0x0 0x0>;
-			clocks = <&clk IMX_SC_R_A53 IMX_SC_PM_CLK_CPU>;
-			enable-method = "psci";
-			next-level-cache = <&A53_L2>;
-			operating-points-v2 = <&a53_opp_table>;
-			#cooling-cells = <2>;
-		};
-
-		A53_1: cpu@1 {
-			device_type = "cpu";
-			compatible = "arm,cortex-a53", "arm,armv8";
-			reg = <0x0 0x1>;
-			clocks = <&clk IMX_SC_R_A53 IMX_SC_PM_CLK_CPU>;
-			enable-method = "psci";
-			next-level-cache = <&A53_L2>;
-			operating-points-v2 = <&a53_opp_table>;
-			#cooling-cells = <2>;
-		};
-
-		A53_2: cpu@2 {
-			device_type = "cpu";
-			compatible = "arm,cortex-a53", "arm,armv8";
-			reg = <0x0 0x2>;
-			clocks = <&clk IMX_SC_R_A53 IMX_SC_PM_CLK_CPU>;
-			enable-method = "psci";
-			next-level-cache = <&A53_L2>;
-			operating-points-v2 = <&a53_opp_table>;
-			#cooling-cells = <2>;
-		};
-
-		A53_3: cpu@3 {
-			device_type = "cpu";
-			compatible = "arm,cortex-a53", "arm,armv8";
-			reg = <0x0 0x3>;
-			clocks = <&clk IMX_SC_R_A53 IMX_SC_PM_CLK_CPU>;
-			enable-method = "psci";
-			next-level-cache = <&A53_L2>;
-			operating-points-v2 = <&a53_opp_table>;
-			#cooling-cells = <2>;
 		};
 
 		A72_0: cpu@100 {
@@ -150,42 +76,8 @@
 			#cooling-cells = <2>;
 		};
 
-		A53_L2: l2-cache0 {
-			compatible = "cache";
-		};
-
 		A72_L2: l2-cache1 {
 			compatible = "cache";
-		};
-	};
-
-	a53_opp_table: a53-opp-table {
-		compatible = "operating-points-v2";
-		opp-shared;
-
-		opp-600000000 {
-			opp-hz = /bits/ 64 <600000000>;
-			opp-microvolt = <900000>;
-			clock-latency-ns = <150000>;
-		};
-
-		opp-900000000 {
-			opp-hz = /bits/ 64 <900000000>;
-			opp-microvolt = <1000000>;
-			clock-latency-ns = <150000>;
-		};
-
-		opp-1104000000 {
-			opp-hz = /bits/ 64 <1104000000>;
-			opp-microvolt = <1100000>;
-			clock-latency-ns = <150000>;
-		};
-
-		opp-1200000000 {
-			opp-hz = /bits/ 64 <1200000000>;
-			opp-microvolt = <1100000>;
-			clock-latency-ns = <150000>;
-			opp-suspend;
 		};
 	};
 
@@ -228,7 +120,6 @@
 		      <0x0 0x52020000 0 0x20000>; /* GICV */
 		#interrupt-cells = <3>;
 		interrupt-controller;
-		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
 		interrupt-parent = <&gic>;
 	};
 
@@ -286,6 +177,7 @@
 			     <0 32 4>, <0 32 4>, <0 32 4>, <0 32 4>,
 			     <0 32 4>, <0 32 4>, <0 32 4>, <0 32 4>,
 			     <0 32 4>, <0 32 4>, <0 32 4>, <0 32 4>;
+		status = "disabled";
 	};
 
 	scu {
@@ -293,15 +185,15 @@
 		mbox-names = "tx0", "tx1", "tx2", "tx3",
 			     "rx0", "rx1", "rx2", "rx3",
 			     "gip3";
-		mboxes = <&lsio_mu1 0 0
-			  &lsio_mu1 0 1
-			  &lsio_mu1 0 2
-			  &lsio_mu1 0 3
-			  &lsio_mu1 1 0
-			  &lsio_mu1 1 1
-			  &lsio_mu1 1 2
-			  &lsio_mu1 1 3
-			  &lsio_mu1 3 3>;
+		mboxes = <&lsio_mu2 0 0
+			  &lsio_mu2 0 1
+			  &lsio_mu2 0 2
+			  &lsio_mu2 0 3
+			  &lsio_mu2 1 0
+			  &lsio_mu2 1 1
+			  &lsio_mu2 1 2
+			  &lsio_mu2 1 3
+			  &lsio_mu2 3 3>;
 
 		pd: imx8qx-pd {
 			compatible = "fsl,imx8qm-scu-pd", "fsl,scu-pd";
@@ -356,34 +248,6 @@
 		cpu-thermal0 {
 			polling-delay-passive = <250>;
 			polling-delay = <2000>;
-			thermal-sensors = <&tsens IMX_SC_R_A53>;
-			trips {
-				cpu_alert0: trip0 {
-					temperature = <107000>;
-					hysteresis = <2000>;
-					type = "passive";
-				};
-				cpu_crit0: trip1 {
-					temperature = <127000>;
-					hysteresis = <2000>;
-					type = "critical";
-				};
-			};
-			cooling-maps {
-				map0 {
-					trip = <&cpu_alert0>;
-					cooling-device =
-					<&A53_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-					<&A53_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-					<&A53_2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-					<&A53_3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-				};
-			};
-		};
-
-		cpu-thermal1 {
-			polling-delay-passive = <250>;
-			polling-delay = <2000>;
 			thermal-sensors = <&tsens IMX_SC_R_A72>;
 			trips {
 				cpu_alert1: trip0 {
@@ -403,24 +267,6 @@
 					cooling-device =
 					<&A72_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
 					<&A72_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-				};
-			};
-		};
-
-		gpu-thermal0 {
-			polling-delay-passive = <250>;
-			polling-delay = <2000>;
-			thermal-sensors = <&tsens IMX_SC_R_GPU_0_PID0>;
-			trips {
-				gpu_alert0: trip0 {
-					temperature = <107000>;
-					hysteresis = <2000>;
-					type = "passive";
-				};
-				gpu_crit0: trip1 {
-					temperature = <127000>;
-					hysteresis = <2000>;
-					type = "critical";
 				};
 			};
 		};
