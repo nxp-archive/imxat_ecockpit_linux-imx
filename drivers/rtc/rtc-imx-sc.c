@@ -27,6 +27,7 @@ sc_ipc_t timer_ipcHandle;
 
 struct imx_sc_rtc_data {
 	struct rtc_device *rtc;
+	bool readonly; /* true if not authorised to set time */
 	spinlock_t lock;
 };
 
@@ -73,6 +74,9 @@ static int imx_sc_rtc_read_time(struct device *dev, struct rtc_time *tm)
 static int imx_sc_rtc_set_time(struct device *dev, struct rtc_time *tm)
 {
 	struct arm_smccc_res res;
+
+	if (data->readonly)
+		return 0;
 
 	/* pack 2 time parameters into 1 register, 16 bits for each */
 	arm_smccc_smc(FSL_SIP_SRTC, FSL_SIP_SRTC_SET_TIME,
@@ -130,6 +134,13 @@ static int imx_sc_rtc_probe(struct platform_device *pdev)
 	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
 	if (!data)
 		return -ENOMEM;
+
+	if (of_property_read_bool(pdev->dev.of_node, "readonly")) {
+		data->readonly = true;
+		dev_info(&pdev->dev, "not allowed to change time\n");
+	} else {
+		data->readonly = false;
+	}
 
 	platform_set_drvdata(pdev, data);
 
