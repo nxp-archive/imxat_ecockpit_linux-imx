@@ -73,6 +73,10 @@ static struct gic_kvm_info gic_v3_kvm_info;
 /* Our default, arbitrary priority value. Linux only uses one anyway. */
 #define DEFAULT_PMR_VALUE	0xf0
 
+#ifdef CONFIG_GIC_GENTLE_CONFIG
+static u64 gic_mpidr_to_affinity(unsigned long mpidr);
+#endif
+
 static inline unsigned int gic_irq(struct irq_data *d)
 {
 	return d->hwirq;
@@ -301,6 +305,9 @@ static int gic_set_type(struct irq_data *d, unsigned int type)
 	unsigned int irq = gic_irq(d);
 	void (*rwp_wait)(void);
 	void __iomem *base;
+#ifdef CONFIG_GIC_GENTLE_CONFIG
+	u64 affinity;
+#endif
 
 	/* Interrupt configuration for SGIs can't be changed */
 	if (irq < 16)
@@ -318,6 +325,17 @@ static int gic_set_type(struct irq_data *d, unsigned int type)
 		base = gic_data.dist_base;
 		rwp_wait = gic_dist_wait_for_rwp;
 	}
+
+
+#ifdef CONFIG_GIC_GENTLE_CONFIG
+	/*
+	 * eCockpit: set the affinity of the SPI.
+	 * This allows to set the affinity to only the interrupts
+	 * registered by the cluster.
+	 */
+	affinity = gic_mpidr_to_affinity(cpu_logical_map(smp_processor_id()));
+	gic_write_irouter(affinity, base + GICD_IROUTER + irq * 8);
+#endif
 
 	return gic_configure_irq(irq, type, base, rwp_wait);
 }
@@ -360,7 +378,9 @@ static asmlinkage void __exception_irq_entry gic_handle_irq(struct pt_regs *regs
 
 			err = handle_domain_irq(gic_data.domain, irqnr, regs);
 			if (err) {
-				WARN_ONCE(true, "Unexpected interrupt received!\n");
+				WARN_ONCE(true,
+				"Unexpected interrupt received (%d)!\n",
+				irqnr);
 				if (static_key_true(&supports_deactivate)) {
 					if (irqnr < 8192)
 						gic_write_dir(irqnr);
@@ -394,8 +414,19 @@ static asmlinkage void __exception_irq_entry gic_handle_irq(struct pt_regs *regs
 static void __init gic_dist_init(void)
 {
 	unsigned int i;
+#ifndef CONFIG_GIC_GENTLE_CONFIG
 	u64 affinity;
+#endif
 	void __iomem *base = gic_data.dist_base;
+
+#ifdef CONFIG_GIC_GENTLE_CONFIG
+	u32 gicd_ctlr = readl_relaxed(base + GICD_CTLR);
+
+	if (gicd_ctlr & (GICD_CTLR_ENABLE_G1A | GICD_CTLR_ENABLE_G1)) {
+		printk("GIC Distributor already configured: skip gic_dist_init \n");
+		return;
+	}
+#endif
 
 	/* Disable the distributor */
 	writel_relaxed(0, base + GICD_CTLR);
@@ -416,6 +447,14 @@ static void __init gic_dist_init(void)
 	writel_relaxed(GICD_CTLR_ARE_NS | GICD_CTLR_ENABLE_G1A | GICD_CTLR_ENABLE_G1,
 		       base + GICD_CTLR);
 
+#ifndef CONFIG_GIC_GENTLE_CONFIG
+	/*
+	 * eCockpit: do not set the affinity to all interrupts as this
+	 * would conflict with the other cluster's GIC configuration.
+	 * This is now done in function gic_set_type() (called by request_irq)
+	 * which allows to limit this to the interrupts registered by the
+	 * cluster.
+	 */
 	/*
 	 * Set all global interrupts to the boot CPU only. ARE must be
 	 * enabled.
@@ -423,6 +462,7 @@ static void __init gic_dist_init(void)
 	affinity = gic_mpidr_to_affinity(cpu_logical_map(smp_processor_id()));
 	for (i = 32; i < gic_data.irq_nr; i++)
 		gic_write_irouter(affinity, base + GICD_IROUTER + i * 8);
+#endif
 }
 
 static int gic_iterate_rdists(int (*fn)(struct redist_region *, void __iomem *))
