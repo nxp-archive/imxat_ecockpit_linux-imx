@@ -1670,6 +1670,25 @@
 	status = "disabled";
 };
 
+&rpmsg{
+	/*
+	 * 64K for one rpmsg instance:
+	 */
+	vdev-nums = <2>;
+	reg = <0x0 0x90000000 0x0 0x20000>;
+	status = "okay";
+};
+
+&rpmsg1{
+	/*
+	 * 64K for one rpmsg instance, using 2 instance
+	 * 0x90110000 - 0x9011FFFF: audio
+	 */
+	vdev-nums = <2>;
+	reg = <0x0 0x90100000 0x0 0x20000>;
+	status = "okay";
+};
+
 &imx_shmem_net {
 	status = "okay";
 };
@@ -1684,7 +1703,6 @@
 /delete-node/ &gpio0_mipi_csi0;
 /delete-node/ &gpio0_mipi_csi1;
 /delete-node/ &hdmi_rx;
-/delete-node/ &imx_rpmsg;
 /delete-node/ &irqsteer_hdmi_rx;
 /delete-node/ &i2c0_mipi_csi0;
 /delete-node/ &i2c0_mipi_csi1;
