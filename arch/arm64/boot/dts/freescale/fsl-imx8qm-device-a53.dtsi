@@ -4334,7 +4334,7 @@
 		rpmsg: rpmsg {
 			compatible = "fsl,imx8qm-rpmsg";
 			power-domains = <&pd_lsio_mu5a>;
-			mub-partition = <3>;
+			mub-partition = <5>;
 			memory-region = <&rpmsg_dma_reserved>;
 			status = "disabled";
 		};
@@ -4352,7 +4352,7 @@
 		rpmsg1: rpmsg1{
 			compatible = "fsl,imx8qm-rpmsg";
 			multi-core-id = <1>;
-			mub-partition = <4>;
+			mub-partition = <6>;
 			power-domains = <&pd_lsio_mu6a>;
 			memory-region = <&rpmsg_dma_reserved>;
 			status = "disabled";
