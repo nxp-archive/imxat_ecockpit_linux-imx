@@ -285,8 +285,10 @@ static sc_rsrc_t get_scu_mu_rsrc(void)
 		/* MU for A72 cluster */
 		return SC_R_MU_2A;
 	case 1:
-	default:
 		/* MU for A53 cluster */
+		return SC_R_MU_1A;
+	default:
+		pr_err("%s: ERROR unknown MU id %d\n", __func__, scu_mu_id);
 		return SC_R_MU_1A;
 	}
 }
@@ -303,6 +305,10 @@ static void scu_mu_work_handler(struct work_struct *work)
 	for (i = 0; i < SC_IRQ_NUM_GROUP; i++) {
 		sciErr = sc_irq_status(mu_ipcHandle, get_scu_mu_rsrc(), i,
 					&irq_status);
+		if (sciErr)
+			pr_err("%s(irq group=%d): sc_irq_status returned %d\n",
+					__func__, i, sciErr);
+
 		/* no irq? */
 		if (!irq_status)
 			continue;
