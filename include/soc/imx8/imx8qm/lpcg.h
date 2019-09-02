@@ -43,6 +43,7 @@
 #define		MU_11A_LPCG		0x5D660000
 #define		MU_12A_LPCG		0x5D670000
 #define		MU_13A_LPCG		0x5D680000
+#define		MU_8B_LPCG		0x5D6C0000
 
 /* HSIO SS */
 #define		CRR_5_LPCG		0x5F0F0000
