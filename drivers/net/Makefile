@@ -77,3 +77,4 @@ obj-$(CONFIG_NTB_NETDEV) += ntb_netdev.o
 obj-$(CONFIG_FUJITSU_ES) += fjes/
 
 obj-$(CONFIG_IVSHMEM_NET) += ivshmem-net.o
+obj-$(CONFIG_IMX_SHMEM_NET) += imx-shmem-net.o

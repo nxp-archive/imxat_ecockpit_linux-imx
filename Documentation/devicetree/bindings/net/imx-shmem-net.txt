@@ -1,0 +1,49 @@
+i.MX SHMEM-NET implementations
+
+A network device to communicate with another domain.
+Communication is done through shared memory
+ and synchronized by Mailbox Units of imx.
+
+Required properties:
+- compatible : "fsl,imx-shmem-net".
+- rxfirst: The flag that indicates the position of the RX buffer,
+  one of the two partitions must set it.
+- mub-partition: The id number of the remote processors,
+  used on i.mx8qm for partition reset. The default
+  value is 3 in driver without this property.
+- power-domains: the power domain of the associated MU.
+- memory-region: the coherent memory shared across domains.
+
+=====================================================================
+message unit module for SHMEM-NET
+
+- imx_mu_shmem : The message unit module used to do the communications
+  between the cores.
+- compatible : "fsl,imx-mu-shmem".
+- reg : Should contain MU registers location and length.
+- interrupts : interrupt mapping for MU IRQ
+
+Example:
+
+imx_mu_shmem: imx_mu_shmem {
+	compatible = "fsl,imx-mu-shmem";
+	reg = <0x0 0x5d2b0000 0x0 0x10000>;
+	interrupts = <GIC_SPI 202 IRQ_TYPE_LEVEL_HIGH>;
+	clocks = <&clk IMX8QM_LSIO_MU7B_IPG_CLK>;
+	clock-names = "ipg";
+	power-domains = <&pd_lsio_mu7b>;
+	status = "okay";
+};
+
+imx_shmem_net: imx_shmem_net {
+	compatible = "fsl,imx-shmem-net";
+	mub-partition = <1>;
+	power-domains = <&pd_lsio_mu7b>;
+	memory-region = <&shmem_dma_reserved>;
+	status = "disabled";
+};
+
+&imx_shmem_net{
+	status = "okay";
+};
+
