@@ -1670,6 +1670,10 @@
 	status = "disabled";
 };
 
+&imx_shmem_net {
+	status = "okay";
+};
+
 /delete-node/ &asrc1;
 /delete-node/ &ddr_pmu0;
 /delete-node/ &ddr_pmu1;

@@ -102,13 +102,18 @@
 			no-map;
 			reg = <0 0x90400000 0 0x1C00000>;
 		};
+		shmem_dma_reserved:shmem_dma@0x92000000 {
+			compatible = "shared-dma-pool";
+			no-map;
+			reg = <0 0x92000000 0 0x400000>;
+		};
 		decoder_rpc: decoder_rpc@0x92000000 {
 			no-map;
-			reg = <0 0x92000000 0 0x200000>;
+			reg = <0 0x92000000 0 0x0>;
 		};
-		encoder_rpc: encoder_rpc@0x92200000 {
+		encoder_rpc: encoder_rpc@0x92000000 {
 			no-map;
-			reg = <0 0x92200000 0 0x200000>;
+			reg = <0 0x92000000 0 0x0>;
 		};
 		dsp_reserved: dsp@0x92400000 {
 			no-map;
