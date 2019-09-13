@@ -1653,6 +1653,10 @@
 	status = "okay";
 };
 
+&imx_shmem_net {
+	status = "okay";
+	rxfirst;
+};
 
 /delete-node/ &dsp;
 /delete-node/ &dpu1;
