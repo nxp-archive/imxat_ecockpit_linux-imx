@@ -4359,6 +4359,24 @@
 		};
 	};
 
+	imx_mu_shmem: imx_mu_shmem {
+		compatible = "fsl,imx-mu-shmem";
+		reg = <0x0 0x5d2c0000 0x0 0x10000>;
+		interrupts = <GIC_SPI 203 IRQ_TYPE_LEVEL_HIGH>;
+		clocks = <&clk IMX8QM_LSIO_MU8B_IPG_CLK>;
+		clock-names = "ipg";
+		power-domains = <&pd_lsio_mu8b>;
+		status = "okay";
+	};
+
+	imx_shmem_net: imx_shmem_net {
+		compatible = "fsl,imx-shmem-net";
+		mub-partition = <1>;
+		power-domains = <&pd_lsio_mu8b>;
+		memory-region = <&shmem_dma_reserved>;
+		status = "disabled";
+	};
+
 	crypto: caam@0x31400000 {
 		compatible = "fsl,sec-v4.0";
 		reg = <0 0x31400000 0 0x400000>;
