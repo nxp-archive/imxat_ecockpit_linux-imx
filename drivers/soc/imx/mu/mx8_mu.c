@@ -136,6 +136,39 @@ void MU_SendMessageTimeout(void __iomem *base, uint32_t regIndex, uint32_t msg,
 }
 
 /*
+ * Wait and send message to the other core with timeout mechanism.
+ * return -ETIMEDOUT if timeout, 0 if message sent.
+ */
+int MU_SendMessageTimeout2(void __iomem *base, uint32_t regIndex, uint32_t msg,
+		uint32_t t)
+{
+	uint32_t mask = MU_SR_TE0_MASK1 >> regIndex;
+	uint32_t timeout = t;
+
+	if (unlikely(version == MU_VER_ID_V10)) {
+		/* Wait TX register to be empty. */
+		while (!(readl_relaxed(base + MU_V10_ASR_OFFSET1) & mask)) {
+			udelay(10);
+			if (timeout-- == 0)
+				return -ETIMEDOUT;
+		};
+
+		writel_relaxed(msg, base + MU_V10_ATR0_OFFSET1
+			       + (regIndex * 4));
+	} else {
+		/* Wait TX register to be empty. */
+		while (!(readl_relaxed(base + MU_ASR_OFFSET1) & mask)) {
+			udelay(10);
+			if (timeout-- == 0)
+				return -ETIMEDOUT;
+		};
+
+		writel_relaxed(msg, base + MU_ATR0_OFFSET1  + (regIndex * 4));
+	}
+	return 0;
+}
+
+/*
  * Wait to receive message from the other core.
  */
 void MU_ReceiveMsg(void __iomem *base, uint32_t regIndex, uint32_t *msg)
