@@ -327,6 +327,16 @@
 				#power-domain-cells = <0>;
 				power-domains = <&pd_lsio>;
 			};
+			pd_lsio_mu8a: PD_LSIO_MU8A {
+				reg = <SC_R_MU_8A>;
+				#power-domain-cells = <0>;
+				power-domains = <&pd_lsio>;
+			};
+			pd_lsio_mu8b: PD_LSIO_MU8B {
+				reg = <SC_R_MU_8B>;
+				#power-domain-cells = <0>;
+				power-domains = <&pd_lsio>;
+			};
 		};
 
 		pd_conn: PD_CONN {
