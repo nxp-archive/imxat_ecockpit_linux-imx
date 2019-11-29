@@ -338,7 +338,16 @@
 		status = "disabled";
 	};
 
-        sc_pwrkey: sc-powerkey {
+	imx_shmem_net: imx_shmem_net {
+		compatible = "fsl,imx-shmem-net";
+		mub-partition = <1>;
+		mbox-names = "tx", "rx";
+		mboxes = <&lsio_mu8b 0 1
+			  &lsio_mu8b 1 1>;
+		status = "disabled";
+	};
+
+	sc_pwrkey: sc-powerkey {
 		compatible = "fsl,imx8-pwrkey";
 		linux,keycode = <KEY_POWER>;
 		wakeup-source;

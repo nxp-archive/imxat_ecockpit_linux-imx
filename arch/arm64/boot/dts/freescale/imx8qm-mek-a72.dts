@@ -7,7 +7,7 @@
 /dts-v1/;
 
 #include <dt-bindings/usb/pd.h>
-#include "imx8qm.dtsi"
+#include "imx8qm-a72.dtsi"
 
 / {
 	model = "Freescale i.MX8QM MEK";
@@ -124,6 +124,11 @@
 			compatible = "shared-dma-pool";
 			no-map;
 			reg = <0 0x90400000 0 0x100000>;
+		};
+		shmem_dma_reserved:shmem_dma@0x92000000 {
+			compatible = "shared-dma-pool";
+			no-map;
+			reg = <0 0x92000000 0 0x400000>;
 		};
 		decoder_rpc: decoder_rpc@0xd2000000 {
 			no-map;
@@ -959,6 +964,12 @@
 	reg = <0x0 0x90100000 0x0 0x20000>;
 	memory-region = <&rpmsg_dma_reserved>;
 	status = "disabled";
+};
+
+&imx_shmem_net {
+	memory-region = <&shmem_dma_reserved>;
+	rxfirst;
+	status = "okay";
 };
 
 &sata {
