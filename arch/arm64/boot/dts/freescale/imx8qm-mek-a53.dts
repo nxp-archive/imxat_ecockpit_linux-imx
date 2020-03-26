@@ -1788,6 +1788,12 @@
 	readonly;
 };
 
+&crypto {
+	/delete-property/ interrupts;
+	power-domains = <&pd IMX_SC_R_CAAM_JR2>;
+	/delete-node/ sec_jr3;
+};
+
 /delete-node/ &asrc1;
 /delete-node/ &ddr_pmu0;
 /delete-node/ &ddr_pmu1;
