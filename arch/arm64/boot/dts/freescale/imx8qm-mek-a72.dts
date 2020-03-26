@@ -1877,6 +1877,12 @@
 	status = "okay";
 };
 
+&crypto {
+	/delete-property/ interrupts;
+	power-domains = <&pd IMX_SC_R_CAAM_JR3>;
+	/delete-node/ sec_jr2;
+};
+
 /delete-node/ &edma1;
 
 /delete-node/ &gpu_3d0;
