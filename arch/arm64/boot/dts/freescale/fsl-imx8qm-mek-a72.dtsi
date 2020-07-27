@@ -476,13 +476,21 @@
 			>;
 		};
 
+		pinctrl_pcieb: pciebgrp {
+			fsl,pins = <
+				SC_P_PCIE_CTRL1_CLKREQ_B_LSIO_GPIO4_IO30	0x06000021
+				SC_P_PCIE_CTRL1_WAKE_B_LSIO_GPIO4_IO31		0x04000021
+				SC_P_PCIE_CTRL1_PERST_B_LSIO_GPIO5_IO00		0x06000021
+			>;
+		};
+
 		pinctrl_sim0: sim0grp {
 			fsl,pins = <
-				SC_P_SIM0_CLK_DMA_SIM0_CLK		0x21
-				SC_P_SIM0_IO_DMA_SIM0_IO		0x21
-				SC_P_SIM0_PD_DMA_SIM0_PD		0x21
-				SC_P_SIM0_POWER_EN_DMA_SIM0_POWER_EN	0x21
-				SC_P_SIM0_RST_DMA_SIM0_RST		0x21
+				SC_P_SIM0_CLK_DMA_SIM0_CLK		0xc0000021
+				SC_P_SIM0_IO_DMA_SIM0_IO		0xc2000021
+				SC_P_SIM0_PD_DMA_SIM0_PD		0xc0000021
+				SC_P_SIM0_POWER_EN_DMA_SIM0_POWER_EN	0xc0000021
+				SC_P_SIM0_RST_DMA_SIM0_RST		0xc0000021
 			>;
 		};
 
@@ -647,14 +655,14 @@
 				SC_P_MIPI_CSI0_GPIO0_00_LSIO_GPIO1_IO27		0x00000021
 				SC_P_MIPI_CSI0_GPIO0_01_LSIO_GPIO1_IO28		0x00000021
 			>;
-		};
+                };
 
 		pinctrl_mipi_csi1_en_rst: mipi_csi1_en_rst {
 			fsl,pins = <
 				SC_P_MIPI_CSI1_GPIO0_00_LSIO_GPIO1_IO30         0x00000021
 				SC_P_MIPI_CSI1_GPIO0_01_LSIO_GPIO1_IO31         0x00000021
 			>;
-		};
+                };
 
 		pinctrl_wifi: wifigrp{
 			fsl,pins = <
@@ -664,7 +672,7 @@
 
 		pinctrl_wifi_init: wifi_initgrp{
 			fsl,pins = <
-				SC_P_SCU_GPIO0_07_LSIO_GPIO1_IO03		0x20
+				/* reserve pin init/idle_state to support multiple wlan cards */
 			>;
 		};
 
@@ -1157,16 +1165,17 @@
 	status = "okay";
 };
 
-&pd_cm40_intmux {
-	early_power_on;
+&pcieb {
+	ext_osc = <1>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_pcieb>;
+	reset-gpio = <&gpio5 0 GPIO_ACTIVE_LOW>;
+	clkreq-gpio = <&gpio4 30 GPIO_ACTIVE_LOW>;
+	status = "okay";
 };
 
 &intmux_cm40 {
 	status = "okay";
-};
-
-&pd_cm41_intmux {
-	early_power_on;
 };
 
 &intmux_cm41 {
@@ -1504,45 +1513,53 @@
 	interrupts = <GIC_SPI 438 IRQ_TYPE_LEVEL_HIGH>,
 		     <GIC_SPI 439 IRQ_TYPE_LEVEL_HIGH>;
 	interrupt-names = "edma0-chan16-rx", "edma0-chan17-tx";
+	pdomains = <&pd_dma0_chan16>, <&pd_dma0_chan17>; /* lpuart2 */
 };
 
 &edma2 {
-	reg = <0x0 0x59200000 0x0 0x10000>, /* asrc0 */
-		<0x0 0x59210000 0x0 0x10000>,
-		<0x0 0x59220000 0x0 0x10000>,
-		<0x0 0x59230000 0x0 0x10000>,
-		<0x0 0x59240000 0x0 0x10000>,
-		<0x0 0x59250000 0x0 0x10000>,
-		<0x0 0x59260000 0x0 0x10000>, /* esai0 rx */
-		<0x0 0x59270000 0x0 0x10000>, /* esai0 tx */
-		<0x0 0x592c0000 0x0 0x10000>, /* sai0 rx */
-		<0x0 0x592d0000 0x0 0x10000>, /* sai0 tx */
-		<0x0 0x592e0000 0x0 0x10000>, /* sai1 rx */
-		<0x0 0x592f0000 0x0 0x10000>, /* sai1 tx */
-		<0x0 0x59320000 0x0 0x10000>, /* sai4 rx */
-		<0x0 0x59330000 0x0 0x10000>; /* sai5 tx */
+	reg =	<0x0 0x59200000 0x0 0x10000>, /* asrc0 */
+			<0x0 0x59210000 0x0 0x10000>,
+			<0x0 0x59220000 0x0 0x10000>,
+			<0x0 0x59230000 0x0 0x10000>,
+			<0x0 0x59240000 0x0 0x10000>,
+			<0x0 0x59250000 0x0 0x10000>,
+			<0x0 0x59260000 0x0 0x10000>, /* esai0 rx */
+			<0x0 0x59270000 0x0 0x10000>, /* esai0 tx */
+			<0x0 0x592c0000 0x0 0x10000>, /* sai0 rx */
+			<0x0 0x592d0000 0x0 0x10000>, /* sai0 tx */
+			<0x0 0x592e0000 0x0 0x10000>, /* sai1 rx */
+			<0x0 0x592f0000 0x0 0x10000>, /* sai1 tx */
+			<0x0 0x59320000 0x0 0x10000>, /* sai4 rx */
+			<0x0 0x59330000 0x0 0x10000>; /* sai5 tx */
 	dma-channels = <14>;
 	interrupts =	<GIC_SPI 374 IRQ_TYPE_LEVEL_HIGH>, /* asrc0 */
-			<GIC_SPI 375 IRQ_TYPE_LEVEL_HIGH>,
-			<GIC_SPI 376 IRQ_TYPE_LEVEL_HIGH>,
-			<GIC_SPI 377 IRQ_TYPE_LEVEL_HIGH>,
-			<GIC_SPI 378 IRQ_TYPE_LEVEL_HIGH>,
-			<GIC_SPI 379 IRQ_TYPE_LEVEL_HIGH>,
-			<GIC_SPI 410 IRQ_TYPE_LEVEL_HIGH>, /* esai0 */
-			<GIC_SPI 410 IRQ_TYPE_LEVEL_HIGH>,
-			<GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>, /* sai0 */
-			<GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-			<GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>, /* sai1 */
-			<GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>,
-			<GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>, /* sai4 */
-			<GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>; /* sai5 */
-	interrupt-names = "edma2-chan0-rx", "edma2-chan1-rx", /* asrc0 */
-			"edma2-chan2-rx", "edma2-chan3-tx",
-			"edma2-chan4-tx", "edma2-chan5-tx",
-			"edma2-chan6-rx", "edma2-chan7-tx", /* esai0 */
-			"edma2-chan12-rx", "edma2-chan13-tx", /* sai0 */
-			"edma2-chan14-rx", "edma2-chan15-tx", /* sai1 */
-			"edma2-chan18-rx", "edma2-chan19-tx"; /* sai4, sai5 */
+					<GIC_SPI 375 IRQ_TYPE_LEVEL_HIGH>,
+					<GIC_SPI 376 IRQ_TYPE_LEVEL_HIGH>,
+					<GIC_SPI 377 IRQ_TYPE_LEVEL_HIGH>,
+					<GIC_SPI 378 IRQ_TYPE_LEVEL_HIGH>,
+					<GIC_SPI 379 IRQ_TYPE_LEVEL_HIGH>,
+					<GIC_SPI 410 IRQ_TYPE_LEVEL_HIGH>, /* esai0 */
+					<GIC_SPI 410 IRQ_TYPE_LEVEL_HIGH>,
+					<GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>, /* sai0 */
+					<GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
+					<GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>, /* sai1 */
+					<GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>,
+					<GIC_SPI 326 IRQ_TYPE_LEVEL_HIGH>, /* sai4 */
+					<GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>; /* sai5 */
+	interrupt-names =	"edma2-chan0-rx", "edma2-chan1-rx", /* asrc0 */
+						"edma2-chan2-rx", "edma2-chan3-tx",
+						"edma2-chan4-tx", "edma2-chan5-tx",
+						"edma2-chan6-rx", "edma2-chan7-tx", /* esai0 */
+						"edma2-chan12-rx", "edma2-chan13-tx", /* sai0 */
+						"edma2-chan14-rx", "edma2-chan15-tx", /* sai1 */
+						"edma2-chan18-rx", "edma2-chan19-tx"; /* sai4, sai5 */
+	pdomains = <&pd_dma2_chan0>, <&pd_dma2_chan1>, <&pd_dma2_chan2>, /* asrc0 */
+			   <&pd_dma2_chan3>, <&pd_dma2_chan4>, <&pd_dma2_chan5>,
+			   <&pd_dma2_chan6>, <&pd_dma2_chan7>, /* esai0 */
+			   <&pd_dma2_chan12>, <&pd_dma2_chan13>, /* sai0 */
+			   <&pd_dma2_chan14>, <&pd_dma2_chan15>, /* sai1 */
+			   <&pd_dma2_chan18>, /* sai4 */
+			   <&pd_dma2_chan19>; /* sai5 */
 };
 
 &edma3 {
@@ -1570,6 +1587,10 @@
 			"edma3-chan4-tx", "edma3-chan5-tx",
 			"edma3-chan8-rx", "edma3-chan9-tx", /* sai6 */
 			"edma3-chan10-tx";                 /* sai7 */
+		pdomains = <&pd_dma3_chan0>, <&pd_dma3_chan1>, <&pd_dma3_chan2>, /* asrc1 */
+			   <&pd_dma3_chan3>, <&pd_dma3_chan4>, <&pd_dma3_chan5>,
+			   <&pd_dma3_chan8>, <&pd_dma3_chan9>, /* sai6 */
+			   <&pd_dma3_chan10>; /* sai7 */
 };
 
 &gic {
