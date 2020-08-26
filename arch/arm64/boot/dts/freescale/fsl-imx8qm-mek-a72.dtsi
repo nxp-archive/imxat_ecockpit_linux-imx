@@ -1648,14 +1648,14 @@
 };
 
 &tsens {
-	tsens-num = <6>;
+	tsens-num = <4>;
 };
 
 &thermal_zones {
 	pmic-thermal0 {
 		polling-delay-passive = <250>;
 		polling-delay = <2000>;
-		thermal-sensors = <&tsens 5>;
+		thermal-sensors = <&tsens 3>;
 		trips {
 			pmic_alert0: trip0 {
 				temperature = <110000>;
@@ -1676,7 +1676,6 @@
 			};
 		};
 	};
-	/delete-node/ cpu-thermal0;
 };
 
 &crypto {
