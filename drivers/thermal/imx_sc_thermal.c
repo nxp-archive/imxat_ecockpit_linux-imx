@@ -47,6 +47,16 @@ static const sc_rsrc_t imx8qm_sensor_hw_id[] = {
 	SC_R_DRC_0, SC_R_PMIC_0, SC_R_PMIC_1, SC_R_PMIC_2,
 };
 
+static const sc_rsrc_t imx8qm_a53_sensor_hw_id[] = {
+        SC_R_A53, SC_R_GPU_0_PID0,
+        SC_R_DRC_0, SC_R_PMIC_0, SC_R_PMIC_1, SC_R_PMIC_2,
+};
+
+static const sc_rsrc_t imx8qm_a72_sensor_hw_id[] = {
+        SC_R_A72, SC_R_GPU_1_PID0,
+        SC_R_DRC_0, SC_R_PMIC_0, SC_R_PMIC_1, SC_R_PMIC_2,
+};
+
 static const sc_rsrc_t imx8qxp_sensor_hw_id[] = {
 	SC_R_SYSTEM, SC_R_DRC_0, SC_R_PMIC_0,
 	SC_R_PMIC_1, SC_R_PMIC_2,
@@ -124,6 +134,8 @@ static const struct thermal_zone_of_device_ops imx_sc_tsens_ops = {
 
 static const struct of_device_id imx_sc_tsens_table[] = {
 	{ .compatible = "nxp,imx8qm-sc-tsens", .data = &imx8qm_sensor_hw_id, },
+	{ .compatible = "nxp,imx8qm-a53-sc-tsens", .data = &imx8qm_a53_sensor_hw_id, },
+	{ .compatible = "nxp,imx8qm-a72-sc-tsens", .data = &imx8qm_a72_sensor_hw_id, },
 	{ .compatible = "nxp,imx8qxp-sc-tsens", .data = &imx8qxp_sensor_hw_id, },
 	{},
 };

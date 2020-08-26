@@ -1372,9 +1372,9 @@
 	};
 
 	tsens: thermal-sensor {
-		compatible = "nxp,imx8qm-sc-tsens";
+		compatible = "nxp,imx8qm-a53-sc-tsens";
 		/* number of the temp sensor on the chip */
-		tsens-num = <5>;
+		tsens-num = <3>;
 		#thermal-sensor-cells = <1>;
 	};
 
@@ -1406,35 +1406,10 @@
 			};
 		};
 
-		cpu-thermal1 {
-			polling-delay-passive = <250>;
-			polling-delay = <2000>;
-			thermal-sensors = <&tsens 1>;
-			trips {
-				cpu_alert1: trip0 {
-					temperature = <107000>;
-					hysteresis = <2000>;
-					type = "passive";
-				};
-				cpu_crit1: trip1 {
-					temperature = <127000>;
-					hysteresis = <2000>;
-					type = "critical";
-				};
-			};
-			cooling-maps {
-				map0 {
-					trip = <&cpu_alert1>;
-					cooling-device =
-					<&A72_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-				};
-			};
-		};
-
 		gpu-thermal0 {
 			polling-delay-passive = <250>;
 			polling-delay = <2000>;
-			thermal-sensors = <&tsens 2>;
+			thermal-sensors = <&tsens 1>;
 			trips {
 				gpu_alert0: trip0 {
 					temperature = <107000>;
@@ -1449,28 +1424,10 @@
 			};
 		};
 
-		gpu-thermal1 {
-			polling-delay-passive = <250>;
-			polling-delay = <2000>;
-			thermal-sensors = <&tsens 3>;
-			trips {
-				gpu_alert1: trip0 {
-					temperature = <107000>;
-					hysteresis = <2000>;
-					type = "passive";
-				};
-				gpu_crit1: trip1 {
-					temperature = <127000>;
-					hysteresis = <2000>;
-					type = "critical";
-				};
-			};
-		};
-
 		drc-thermal0 {
 			polling-delay-passive = <250>;
 			polling-delay = <2000>;
-			thermal-sensors = <&tsens 4>;
+			thermal-sensors = <&tsens 2>;
 			trips {
 				drc_alert0: trip0 {
 					temperature = <107000>;
