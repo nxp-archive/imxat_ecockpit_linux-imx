@@ -744,14 +744,14 @@ static int imx_rpmsg_probe(struct platform_device *pdev)
 		/* Clear any pending partition reset interrupt during
 		 * rpmsg probe.
 		 */
-		sciErr = sc_irq_status(mu_ipchandle, SC_R_MU_1A,
+		sciErr = sc_irq_status(mu_ipchandle, SC_R_MU_0A + mu_id,
 				       SC_IRQ_GROUP_REBOOTED,
 				       &irq_status);
 		if (sciErr != SC_ERR_NONE)
 			pr_info("Cannot get partition reboot interrupt status\n");
 
 		/* Request for the partition reset interrupt. */
-		sciErr = sc_irq_enable(mu_ipchandle, SC_R_MU_1A,
+		sciErr = sc_irq_enable(mu_ipchandle, SC_R_MU_0A + mu_id,
 				       SC_IRQ_GROUP_REBOOTED,
 				       BIT(rpdev->mub_partition), true);
 		if (sciErr)
