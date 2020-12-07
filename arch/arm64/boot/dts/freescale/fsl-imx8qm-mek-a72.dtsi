@@ -1235,10 +1235,6 @@
 	status = "okay";
 };
 
-&gpio1 {
-	status = "okay";
-};
-
 &i2c0_mipi_csi0 {
 	#address-cells = <1>;
 	#size-cells = <0>;
@@ -1616,7 +1612,7 @@
 };
 
 &gpio1 {
-	status = "disabled";
+	status = "okay";
 };
 
 &gpio2 {
