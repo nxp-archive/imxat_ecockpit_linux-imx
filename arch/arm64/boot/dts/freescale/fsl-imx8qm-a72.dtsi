@@ -31,8 +31,8 @@
 	#size-cells = <2>;
 
 	aliases {
-//		csi0 = &mipi_csi_0;
-//		csi1 = &mipi_csi_1;
+		csi0 = &mipi_csi_0;
+		csi1 = &mipi_csi_1;
 //		dpu0 = &dpu1;
 		dpu1 = &dpu2;
 //		ethernet0 = &fec1;
@@ -43,10 +43,10 @@
 		mipi_dsi1 = &mipi_dsi2;
 //		ldb0 = &ldb1;
 		ldb1 = &ldb2;
-//		isi0 = &isi_0;
-//		isi1 = &isi_1;
-//		isi2 = &isi_2;
-//		isi3 = &isi_3;
+		isi0 = &isi_0;
+		isi1 = &isi_1;
+		isi2 = &isi_2;
+		isi3 = &isi_3;
 //		isi4 = &isi_4;
 //		isi5 = &isi_5;
 //		isi6 = &isi_6;
