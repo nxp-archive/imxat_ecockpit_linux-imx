@@ -1429,7 +1429,7 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_mipi0_lpi2c0>;
 	clock-frequency = <100000>;
-	status = "okay";
+	status = "disabled";
 
 	adv_bridge1: adv7535@3d {
 		compatible = "adi,adv7535", "adi,adv7533";
@@ -1449,16 +1449,16 @@
 };
 
 &mipi_dsi_phy1 {
-	status = "okay";
+	status = "disabled";
 };
 
 &mipi_dsi1 {
 	pwr-delay = <10>;
-	status = "okay";
+	status = "disabled";
 };
 
 &mipi_dsi_bridge1 {
-	status = "okay";
+	status = "disabled";
 
 	port@1 {
 		mipi_dsi_bridge1_adv: endpoint {
@@ -1707,7 +1707,7 @@
 	 */
 	vdev-nums = <2>;
 	reg = <0x0 0x90000000 0x0 0x20000>;
-	status = "okay";
+	status = "disabled";
 };
 
 &rpmsg1{
