@@ -93,15 +93,18 @@
 			no-map;
 			reg = <0 0xc6000000 0 0x400000>;
 		};
-		rpmsg_reserved: rpmsg@0xd0000000 {
+
+		/* TODO move to 0xD0000000 */
+		rpmsg_reserved: rpmsg@0x90000000 {
 			no-map;
-			reg = <0 0xd0000000 0 0x400000>;
+			reg = <0 0x90000000 0 0x400000>;
 		};
-		rpmsg_dma_reserved:rpmsg_dma@0xd0400000 {
+		rpmsg_dma_reserved:rpmsg_dma@0x90400000 {
 			compatible = "shared-dma-pool";
 			no-map;
-			reg = <0 0xd0400000 0 0x1C00000>;
+			reg = <0 0x90400000 0 0x800000>;
 		};
+
 		shmem_dma_reserved:shmem_dma@0x92000000 {
 			compatible = "shared-dma-pool";
 			no-map;
@@ -123,16 +126,6 @@
 			no-map;
 			reg = <0 0xd4400000 0 0x800000>;
 		};
-
-		/* global autoconfigured region for contiguous allocations */
-		linux,cma {
-			compatible = "shared-dma-pool";
-			reusable;
-			size = <0 0x3c000000>;
-			alloc-ranges = <0 0xd6000000 0 0x3c000000>;
-			linux,cma-default;
-		};
-
 	};
 
 	gic: interrupt-controller@51a00000 {
@@ -288,6 +281,22 @@
 			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(6) | IRQ_TYPE_LEVEL_LOW)>; /* Hypervisor */
 		clock-frequency = <8000000>;
 		interrupt-parent = <&gic>;
+	};
+
+	/*
+	 * vehicle core driver device node which open power domain dc by default
+	 */
+	vehicle_core: vehicle_core {
+		compatible = "nxp,imx-vehicle";
+		status = "disabled";
+	};
+
+	/*
+	 * vehicle M4 driver which can get info from MCU.
+	 */
+	vehicle_rpmsg_m4: vehicle_rpmsg_m4 {
+		compatible = "nxp,imx-vehicle-m4";
+		status = "disabled";
 	};
 
 	smmu: iommu@51400000 {

@@ -1691,6 +1691,25 @@
 	status = "okay";
 };
 
+&rpmsg{
+	/*
+	 * 64K for one rpmsg instance:
+	 */
+	vdev-nums = <2>;
+	reg = <0x0 0x90000000 0x0 0x20000>;
+	status = "disabled";
+};
+
+&rpmsg1{
+	/*
+	 * 64K for one rpmsg instance, using 2 instance
+	 * 0x90110000 - 0x9011FFFF: audio
+	 */
+	vdev-nums = <2>;
+	reg = <0x0 0x90100000 0x0 0x20000>;
+	status = "okay";
+};
+
 / {
 	reserved-memory {
 	    #address-cells = <2>;
@@ -1720,7 +1739,6 @@
 /delete-node/ &i2c0_hdmi;
 /delete-node/ &i2c1_lvds0;
 /delete-node/ &i2c0_mipi_dsi0;
-/delete-node/ &imx_rpmsg;
 /delete-node/ &intmux_cm40;
 /delete-node/ &irqsteer_dsi0;
 /delete-node/ &irqsteer_hdmi;
@@ -1736,7 +1754,6 @@
 /delete-node/ &mipi_dsi1;
 /delete-node/ &pd_cm40;
 /delete-node/ &pd_dsp_mu_A;
-/delete-node/ &pd_hdmi_rx;
 /delete-node/ &sata;
 /delete-node/ &smmu;
 /delete-node/ &usbotg3;
